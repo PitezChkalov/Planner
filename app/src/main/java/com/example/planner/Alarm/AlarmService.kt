@@ -17,6 +17,11 @@ import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import android.app.NotificationManager
+import android.app.NotificationChannel
+import androidx.core.content.ContextCompat.getSystemService
+
+
 
 
 class AlarmService : Service() {
@@ -65,7 +70,7 @@ class AlarmService : Service() {
     override fun onCreate() {
         super.onCreate()
         Timber.d("onCreate..creating notification")
-        val notification = NotificationCompat.Builder(this)
+        val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANEL_ID)
             .setContentTitle(resources.getString(R.string.app_name))
             .setTicker(resources.getString(R.string.app_name))
             .setContentText(resources.getString(R.string.push))
@@ -75,7 +80,13 @@ class AlarmService : Service() {
             .build()
         notification.flags =
             notification.flags or Notification.FLAG_NO_CLEAR     // NO_CLEAR makes the notification stay when the user performs a "delete all" command
-        startForeground(NOTIFICATION_FOREGROUND_ID, notification)
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+            startForeground(NOTIFICATION_FOREGROUND_ID, notification)
+        }
+        else{
+            createNotificationChannel()
+            startForeground(NOTIFICATION_CHANEL_ID.toInt(), notification)
+        }
     }
 
     fun createNotificationChannel() {
@@ -98,10 +109,11 @@ class AlarmService : Service() {
 
     private fun createNotification(id: Int) {
         Timber.d("Creating new notification")
-        createNotificationChannel()
         val builder = NotificationCompat.Builder(this, NOTIFICATION_CHANEL_ID)
         builder.setSmallIcon(R.drawable.ic_launcher_background)
         builder.setContentTitle(title)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+            builder.setChannelId(NOTIFICATION_CHANEL_ID)
         builder.setContentText(resources.getText(R.string.deadline))
         builder.setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
         val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -129,11 +141,11 @@ class AlarmService : Service() {
                 PendingIntent.FLAG_CANCEL_CURRENT
             )
 
-            var alarmTime = task.deadline - (1000 * 60 * 60)
+            val alarmTime = task.deadline - (1000 * 60 * 60)
             Timber.d("alarm Time =  $alarmTime")
 
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
         }
         else
             Timber.e("deadline < current time")

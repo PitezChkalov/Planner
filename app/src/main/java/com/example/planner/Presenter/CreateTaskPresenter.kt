@@ -9,6 +9,8 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import com.example.planner.Alarm.AlarmReceiver
 import io.reactivex.CompletableObserver
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -121,8 +123,9 @@ class CreateTaskPresenter : MvpPresenter<CreateTaskView>() {
 
             val alarmTime = task.deadline - (1000 * 60*60)
             Timber.d("alarm Time =  $alarmTime")
+            Timber.d(System.currentTimeMillis().toString())
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
         }
         else
             Timber.e("deadline < current time")

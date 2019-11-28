@@ -1,8 +1,10 @@
 package com.example.planner
 
 import android.content.Context
+import android.content.IntentFilter
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.planner.Alarm.AlarmReceiver
 import com.example.planner.Model.TasksDatabase
 import com.example.planner.logging.DebugTree
 import com.example.planner.logging.FileTree
@@ -27,5 +29,7 @@ class Application : android.app.Application(){
         Timber.plant(DebugTree())
         Timber.plant(FileTree())
         initDatabase(this)
+        val filter = IntentFilter("com.example.planner.alarm")
+        this.registerReceiver(AlarmReceiver(), filter)
     }
 }
