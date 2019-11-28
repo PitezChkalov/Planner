@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Planner</string>
+    <string name="action_settings">Settings</string>
+    <string name="title">МОИ ДЕЛА</string>
+    <string name="yes">ОК</string>
+    <string name="no">ОТМЕНА</string>
+    <string name="push">Пуш уведомления</string>
+    <string name="deadline">Скоро дедлайн!</string>
+    <string name="newText">Введите текст</string>
+    <string name="title_hint">Введите заголовок</string>
+    <string name="tv_deadline">DEADLINE</string>
+    <string name="tv_date">27.11.2019</string>
+    <string name="tv_time">10:00</string>
+    <string name="tv_priority">ПРИОРИТЕТ</string>
+    <string name="button_create">создать</string>
+    <string name="test_title">Короткий заголовок</string>
+    <string name="test_content">Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться. Lorem Ipsum используют потому, что тот обеспечивает более </string>
+    <string name="test_date">8h:3m</string>
+
+</resources>
