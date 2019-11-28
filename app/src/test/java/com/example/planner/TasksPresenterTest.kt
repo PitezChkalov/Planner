@@ -8,7 +8,6 @@ import com.example.planner.views.TasksView
 import com.example.planner.views.`TasksView$$State`
 import io.reactivex.Scheduler
 import io.reactivex.Single
-import io.reactivex.SingleObserver
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.disposables.Disposable
 import org.mockito.MockitoAnnotations
@@ -21,11 +20,6 @@ import io.reactivex.internal.schedulers.ExecutorScheduler
 import io.reactivex.plugins.RxJavaPlugins
 import android.content.Context
 import io.reactivex.Completable
-
-
-
-
-
 
 class TasksPresenterTest {
 
@@ -52,19 +46,19 @@ class TasksPresenterTest {
             val immediate = object :Scheduler(){
 
                 override fun scheduleDirect(run: Runnable, delay: Long, unit: TimeUnit): Disposable{
-                    return super.scheduleDirect(run, 0, unit);
+                    return super.scheduleDirect(run, 0, unit)
                 }
                 override fun createWorker(): Worker {
-                    return ExecutorScheduler.ExecutorWorker(Runnable::run, true);
+                    return ExecutorScheduler.ExecutorWorker(Runnable::run, true)
                 }
 
             }
 
-        RxJavaPlugins.setInitIoSchedulerHandler({ t->immediate });
-        RxJavaPlugins.setInitComputationSchedulerHandler({ t->immediate });
-        RxJavaPlugins.setInitNewThreadSchedulerHandler({ t->immediate });
-        RxJavaPlugins.setInitSingleSchedulerHandler({ t->immediate });
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler({ t->immediate });
+        RxJavaPlugins.setInitIoSchedulerHandler({ t->immediate })
+        RxJavaPlugins.setInitComputationSchedulerHandler({ t->immediate })
+        RxJavaPlugins.setInitNewThreadSchedulerHandler({ t->immediate })
+        RxJavaPlugins.setInitSingleSchedulerHandler({ t->immediate })
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler({ t->immediate })
     }
 
     @Test
